@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Room extends Model
 {
@@ -55,6 +56,22 @@ class Room extends Model
     public function reservations(): HasMany
     {
         return $this->hasMany(Reservation::class);
+    }
+
+    /**
+     * @return HasMany<RoomPicture, Room>
+     */
+    public function pictures(): HasMany
+    {
+        return $this->hasMany(RoomPicture::class)->orderBy('sort_order')->orderBy('id');
+    }
+
+    /**
+     * @return HasOne<RoomPicture, Room>
+     */
+    public function coverPicture(): HasOne
+    {
+        return $this->hasOne(RoomPicture::class)->where('is_cover', true);
     }
 
 }

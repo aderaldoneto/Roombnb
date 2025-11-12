@@ -17,3 +17,7 @@ Familiaridade
 
 ## Models 
 User, City, Specialty, Room, Reservation 
+
+
+
+php artisan storage:link
