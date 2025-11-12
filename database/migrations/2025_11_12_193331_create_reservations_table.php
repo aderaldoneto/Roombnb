@@ -20,7 +20,6 @@ return new class extends Migration
             $table->enum('status', ['pending','confirmed','canceled'])->default('pending');
             $table->enum('payment_method', ['credit_card','cash','pix'])->nullable();
             $table->timestamps();
-            $table->timestamps();
             
             $table->unique(['room_id','check_in','check_out','status']);
         });
