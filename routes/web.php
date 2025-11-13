@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RoomController;
 use App\Models\City;
 use App\Models\Room;
 use App\Models\Specialty;
@@ -35,6 +36,14 @@ Route::get('/', function () {
         ],
     ]);
 })->name('welcome');
+
+
+Route::middleware(['auth','verified'])->group(function () {
+    Route::get('/rooms/create', [RoomController::class, 'create'])->name('rooms.create');
+    Route::post('/rooms', [RoomController::class, 'store'])->name('rooms.store');
+
+    Route::get('/rooms/{room}', [RoomController::class, 'show'])->name('rooms.show');
+});
 
 
 // Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');

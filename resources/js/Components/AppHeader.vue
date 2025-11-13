@@ -42,7 +42,7 @@ if (typeof window !== 'undefined') {
 
         <template v-if="$page.props.auth?.user">
 
-            <Link :href="route('profile.edit')" class="text-sm font-semibold tracking-tight">Criar acomodação</Link>
+            <Link :href="route('rooms.create')" class="text-sm font-semibold tracking-tight">Criar acomodação</Link>
             
             <Link :href="route('profile.edit')" class="text-sm underline underline-offset-4">{{ $page.props.auth.user.name }}</Link>
 

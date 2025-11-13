@@ -3,6 +3,7 @@ import { Head, Link, router, usePage } from '@inertiajs/vue3'
 import { ref } from 'vue'
 import AppHeader from '@/Components/AppHeader.vue'
 import AppFooter from '@/Components/AppFooter.vue'
+import { formatCurrencyInput } from '@/Utils/Currency'
 
 const appName = usePage().props.app.name
 
@@ -40,7 +41,7 @@ function search() {
 }
 
 function formatPrice(v) {
-    const n = Number(v || 0)
+    const n = Number(v || 0)/100
     return n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
 }
 </script>
