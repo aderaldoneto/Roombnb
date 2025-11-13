@@ -42,7 +42,7 @@ const props = defineProps({
                 class="rounded-full px-4 py-2 text-sm font-medium ring-1 ring-zinc-300 hover:bg-zinc-50 dark:ring-zinc-700 dark:hover:bg-zinc-900">
                 Admin
             </Link> -->
-            <Link :href="route('profile.edit')" class="text-sm underline underline-offset-4">Perfil</Link>
+            <Link :href="route('profile.edit')" class="text-sm underline underline-offset-4">{{ $page.props.auth.user.name }}</Link>
             <Link :href="route('logout')" method="post" as="button"
                     class="rounded-full bg-zinc-900 px-4 py-2 text-sm font-medium text-white dark:bg-white dark:text-zinc-900">
                 Sair
