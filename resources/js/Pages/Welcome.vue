@@ -64,29 +64,26 @@ function formatPrice(v) {
         </div>
 
         <!-- Auth links -->
-        <nav v-if="canLogin" class="flex items-center gap-2">
-          <Link
-            v-if="$page.props.auth?.user"
-            :href="route('dashboard')"
-            class="rounded-full px-4 py-2 text-sm font-medium ring-1 ring-zinc-300 transition hover:bg-zinc-50 dark:ring-zinc-700 dark:hover:bg-zinc-900"
-          >
-            Dashboard
-          </Link>
-          <template v-else>
+        <nav class="flex items-center gap-2">
             <Link
-              :href="route('login')"
-              class="rounded-full px-4 py-2 text-sm font-medium ring-1 ring-zinc-300 transition hover:bg-zinc-50 dark:ring-zinc-700 dark:hover:bg-zinc-900"
-            >
-              Entrar
+                v-if="$page.props.auth?.user"
+                :href="route('dashboard')"
+                class="rounded-full px-4 py-2 text-sm font-medium ring-1 ring-zinc-300 transition hover:bg-zinc-50 dark:ring-zinc-700 dark:hover:bg-zinc-900"
+                >
+                Dashboard
             </Link>
-            <Link
-              v-if="canRegister"
+            <Link v-if="!$page.props.auth?.user"
               :href="route('register')"
-              class="rounded-full bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200"
+              class="rounded-full px-4 py-2 text-sm font-medium ring-1 ring-zinc-300 transition hover:bg-zinc-50 dark:ring-zinc-700 dark:hover:bg-zinc-900"
             >
               Criar conta
             </Link>
-          </template>
+            <Link v-if="!$page.props.auth?.user"
+              :href="route('login')"
+              class="rounded-full bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200"
+            >
+              Entrar
+            </Link>
         </nav>
       </div>
 
@@ -138,7 +135,7 @@ function formatPrice(v) {
     <!-- Banner -->
     <section class="relative">
       <div class="mx-auto max-w-7xl px-4">
-        <div class="mt-8 rounded-3xl bg-[url('https://images.unsplash.com/photo-1586773860418-d37222d8fce3?q=80&w=1400&auto=format&fit=crop')] bg-cover bg-center p-8 sm:p-12">
+        <div class="mt-8 rounded-3xl bg-[url('img_background.avif')] bg-cover bg-center p-8 sm:p-12">
           <div class="max-w-xl rounded-2xl bg-white/80 p-6 backdrop-blur-md dark:bg-zinc-900/60">
             <h1 class="text-2xl font-semibold sm:text-3xl">Encontre salas para suas consultas</h1>
             <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-300">
