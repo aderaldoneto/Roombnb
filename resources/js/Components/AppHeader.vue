@@ -27,13 +27,29 @@ const props = defineProps({
 
     <!-- Auth links -->
     <nav class="flex items-center gap-2">
-        <Link
-            v-if="$page.props.auth?.user"
-            :href="route('dashboard')"
-            class="rounded-full px-4 py-2 text-sm font-medium ring-1 ring-zinc-300 transition hover:bg-zinc-50 dark:ring-zinc-700 dark:hover:bg-zinc-900"
-            >
-            Dashboard
-        </Link>
+
+        <template v-if="$page.props.auth?.user">
+            <!-- Dashboard só se tiver ao menos 1 room para ver o desempenho -->
+            <!-- <Link v-if="$page.props.flags?.hasRooms"
+                :href="route('dashboard')"
+                class="rounded-full px-4 py-2 text-sm font-medium ring-1 ring-zinc-300 hover:bg-zinc-50 dark:ring-zinc-700 dark:hover:bg-zinc-900">
+                Dashboard
+            </Link> -->
+
+            <!-- Admin só para super user -->
+            <!-- <Link v-if="$page.props.flags?.isSuper"
+                :href="route('admin.home')"
+                class="rounded-full px-4 py-2 text-sm font-medium ring-1 ring-zinc-300 hover:bg-zinc-50 dark:ring-zinc-700 dark:hover:bg-zinc-900">
+                Admin
+            </Link> -->
+            <Link :href="route('profile.edit')" class="text-sm underline underline-offset-4">Perfil</Link>
+            <Link :href="route('logout')" method="post" as="button"
+                    class="rounded-full bg-zinc-900 px-4 py-2 text-sm font-medium text-white dark:bg-white dark:text-zinc-900">
+                Sair
+            </Link>
+        </template>
+
+        
         <Link v-if="!$page.props.auth?.user"
             :href="route('register')"
             class="rounded-full px-4 py-2 text-sm font-medium ring-1 ring-zinc-300 transition hover:bg-zinc-50 dark:ring-zinc-700 dark:hover:bg-zinc-900"
