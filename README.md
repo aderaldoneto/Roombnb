@@ -21,3 +21,4 @@ User, City, Specialty, Room, Reservation
 
 
 php artisan storage:link
+sail php artisan db:seed SpecialtySeeder
