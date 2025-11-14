@@ -19,6 +19,7 @@ Route::get('/', function () {
             'id' => $r->id,
             'title' => $r->title,
             'city_name' => $r->city->name . ' - ' . $r->city->state,
+            'specialty_name' => $r->specialty->name,
             'price' => $r->price, // accessor já em reais
             'rating_avg' => $r->rating_avg,
             'cover_url' => optional($r->coverPicture)->url,
@@ -43,6 +44,8 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::post('/rooms', [RoomController::class, 'store'])->name('rooms.store');
 
     Route::get('/rooms/{room}', [RoomController::class, 'show'])->name('rooms.show');
+    Route::get('/rooms/{room}/edit', [RoomController::class, 'edit'])->name('rooms.edit');
+    Route::put('/rooms/{room}', [RoomController::class, 'update'])->name('rooms.update');
 });
 
 

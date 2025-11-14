@@ -16,6 +16,7 @@ class Room extends Model
     protected $fillable = [
         'user_id', 
         'city_id',
+        'specialty_id',
         'title',
         'description',
         'price',
@@ -43,11 +44,11 @@ class Room extends Model
     }
 
     /**
-     * @return BelongsToMany<Specialty, $this>
+     * @return BelongsTo<Specialty, Room>
      */
-    public function specialties(): BelongsToMany
+    public function specialty(): BelongsTo
     {
-        return $this->belongsToMany(Specialty::class)->withTimestamps();
+        return $this->belongsTo(Specialty::class);
     }
 
     /**
@@ -72,6 +73,14 @@ class Room extends Model
     public function coverPicture(): HasOne
     {
         return $this->hasOne(RoomPicture::class)->where('is_cover', true);
+    }
+
+    /**
+     * @return BelongsTo<User, Room>
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
 }

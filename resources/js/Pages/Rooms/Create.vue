@@ -142,7 +142,7 @@ function handlePriceInput(e) {
 
                             <div>
                                 <label class="mb-1 block text-xs font-medium text-zinc-500 dark:text-zinc-400">Descrição</label>
-                                <textarea v-model="form.description" rows="5" maxlength="5000" :class="clsInput(form.errors.description)" placeholder="Detalhes do espaço, horários, regras..." required></textarea>
+                                <textarea v-model="form.description" rows="5" maxlength="65000" :class="clsInput(form.errors.description)" placeholder="Detalhes do espaço, horários, regras..." required></textarea>
                                 <p v-if="form.errors.description" class="mt-1 text-xs text-red-600">{{ form.errors.description }}</p>
                             </div>
 

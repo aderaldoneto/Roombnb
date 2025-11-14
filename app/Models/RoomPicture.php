@@ -22,7 +22,6 @@ class RoomPicture extends Model
      */
     public function getUrlAttribute(): ?string
     {
-        // return Storage::url($this->path); 
         return $this->path
             ? Storage::url($this->path)
             : null;

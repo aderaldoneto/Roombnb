@@ -128,8 +128,8 @@ function formatPrice(v) {
                 <article v-for="room in rooms" :key="room.id" class="rounded-2xl border border-zinc-200/70 bg-white shadow-sm transition hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900">
                     <Link :href="route('rooms.show', room.id)">
                     <div class="aspect-[4/3] w-full overflow-hidden rounded-t-2xl bg-zinc-100 dark:bg-zinc-800">
-                        <img :src="room.cover_url || 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1200&auto=format&fit=crop'"
-                            alt="Foto da sala"
+                        <img :src="room.cover_url"
+                            alt="Foto do consultório"
                             class="h-full w-full object-cover transition duration-300 hover:scale-[1.03]" />
                     </div>
                     <div class="p-4">
@@ -140,6 +140,7 @@ function formatPrice(v) {
                                 <span>{{ room.rating_avg ?? 0 }}</span>
                             </div>
                         </div>
+                        <p class="mt-1 text-sm text-zinc-500">{{ room.specialty_name }}</p>
                         <p class="mt-1 text-sm text-zinc-500">{{ room.city_name }}</p>
                         <p class="mt-3 text-sm font-semibold">{{ formatPrice(room.price) }} <span class="font-normal text-zinc-500">/ diária</span></p>
                     </div>
