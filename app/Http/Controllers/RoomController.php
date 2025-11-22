@@ -83,6 +83,7 @@ class RoomController extends Controller
         return Inertia::render('Rooms/Show', [
             'room' => [
                 'id'           => $room->id,
+                'user_id'      => $room->user_id,
                 'title'        => $room->title,
                 'description'  => $room->description,
                 'price'        => (int) $room->price,
@@ -109,6 +110,33 @@ class RoomController extends Controller
             ],
         ]);
     }
+
+    public function list(Request $request)
+    {
+        $user = $request->user();
+
+        $rooms = Room::with(['city', 'coverPicture'])
+            ->where('user_id', $user->id)
+            ->latest('id')
+            ->get()
+            ->map(function ($room) {
+                return [
+                    'id'         => $room->id,
+                    'title'      => $room->title,
+                    'city_name'  => $room->city
+                        ? $room->city->name . ' - ' . $room->city->state
+                        : '—',
+                    'price'      => $room->price,
+                    'cover_url'  => $room->coverPicture?->url,
+                ];
+            });
+
+        return Inertia::render('Rooms/List', [
+            'rooms' => $rooms,
+        ]);
+    }
+
+
 
     /**
      * @param \Illuminate\Http\Request $request

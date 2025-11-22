@@ -1,8 +1,10 @@
 <script setup>
 import { Link, usePage } from '@inertiajs/vue3'
-import { ref } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount  } from 'vue'
 
-const appName = usePage().props.app.name
+const page = usePage()
+const appName = page.props.app?.name ?? 'RoomBnB'
+const authUser = page.props.auth?.user ?? null
 const menuOpen = ref(false)
 
 const props = defineProps({
@@ -10,16 +12,35 @@ const props = defineProps({
   canRegister: Boolean,
 })
 
+const isTenant = computed(() => {
+  if (!authUser || !authUser.roles) return false
+
+  return authUser.roles.includes('tenant')
+})
+
+const isHost = computed(() => {
+  if (!authUser || !authUser.roles) return false
+
+  return authUser.roles.includes('host')
+})
 
 function closeOnClickOutside(event) {
-    if (!event.target.closest('.user-menu')) {
-        menuOpen.value = false
-    }
-}
-if (typeof window !== 'undefined') {
-    window.addEventListener('click', closeOnClickOutside)
+  if (!event.target.closest('.user-menu')) {
+    menuOpen.value = false
+  }
 }
 
+onMounted(() => {
+  if (typeof window !== 'undefined') {
+    window.addEventListener('click', closeOnClickOutside)
+  }
+})
+
+onBeforeUnmount(() => {
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('click', closeOnClickOutside)
+  }
+})
 </script>
 
 <template> 
@@ -42,7 +63,20 @@ if (typeof window !== 'undefined') {
 
         <template v-if="$page.props.auth?.user">
 
-            <Link :href="route('rooms.create')" class="text-sm font-semibold tracking-tight">Criar acomodação</Link>
+            <Link 
+                v-if="isTenant" 
+                :href="route('tenant.dashboard')" 
+                class="text-sm font-semibold tracking-tight">
+                Dashboard 
+            </Link>
+
+            <Link 
+                v-if="isTenant" 
+                :href="route('rooms.create')" 
+                class="text-sm font-semibold tracking-tight"
+                >
+                    Criar acomodação 
+            </Link>
             
             <Link :href="route('profile.edit')" class="text-sm underline underline-offset-4">{{ $page.props.auth.user.name }}</Link>
 
@@ -60,13 +94,27 @@ if (typeof window !== 'undefined') {
                             class="block px-4 py-2 text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800">
                         Perfil
                     </Link>
+                    <Link
+                        v-if="isTenant"
+                        :href="route('tenant.index')" 
+                        class="block px-4 py-2 text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                        >
+                        Minhas reservas
+                    </Link>
+                    <Link
+                        v-if="isTenant"
+                        :href="route('rooms.list')" 
+                        class="block px-4 py-2 text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                        >
+                        Minhas salas
+                    </Link>
                     <!-- Dashboard só se tiver ao menos 1 room para ver o desempenho -->
                     <!-- <Link :href="route('dashboard')"
                             v-if="$page.props.flags?.hasRooms"
                             class="block px-4 py-2 text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800">
                         Dashboard
-                    </Link>
-                    <Link :href="route('admin.home')"
+                    </Link> -->
+                    <!-- <Link :href="route('admin.home')"
                             v-if="$page.props.flags?.isSuper"
                             class="block px-4 py-2 text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800">
                         Admin

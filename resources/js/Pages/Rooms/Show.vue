@@ -3,7 +3,8 @@ import { Head, Link, usePage } from '@inertiajs/vue3'
 import AppHeader from '@/Components/AppHeader.vue'
 import AppFooter from '@/Components/AppFooter.vue'
 
-const appName = usePage().props.app.name
+const appName = usePage().props.app.name 
+const authUser = usePage().props.auth.user
 
 const props = defineProps({
   room: {
@@ -16,6 +17,9 @@ function formatPriceCents(cents) {
   const n = (Number(cents || 0) / 100)
   return n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
 }
+
+console.log(props.room)
+
 </script>
 
 <template>
@@ -85,10 +89,19 @@ function formatPriceCents(cents) {
 
             <div class="mt-5 flex gap-2">
               <Link
+                v-if="authUser && authUser.id === room.user_id"
                 :href="route('rooms.edit', room.id)"
                 class="w-full rounded-xl bg-zinc-900 px-4 py-2 text-center text-sm font-semibold text-white hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200"
               >
                 Editar anúncio
+              </Link>
+
+              <Link
+                v-else
+                :href="route('reservations.create', room.id)"
+                class="w-full rounded-xl bg-emerald-600 px-4 py-2 text-center text-sm font-semibold text-white hover:bg-emerald-500 dark:bg-emerald-400 dark:text-zinc-900 dark:hover:bg-emerald-300"
+              >
+                Reservar
               </Link>
             </div>
 

@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class AdminUserSeeder extends Seeder
+class ClientUserSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,11 +14,10 @@ class AdminUserSeeder extends Seeder
     public function run(): void
     {
         $user = User::updateOrCreate(
-            ['email' => 'admin@teste.com'],
-            ['name' => 'Admin', 'password' => bcrypt('123456789')]
+            ['email' => 'cliente@teste.com'],
+            ['name' => 'Cliente', 'password' => bcrypt('123456789')]
         );
 
-        $user->assignRole('admin');
-        $user->assignRole('tenant');
+        $user->assignRole('host');
     }
 }
