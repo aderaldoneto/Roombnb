@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminAuthController;
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\ReservationController;
@@ -12,6 +14,43 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+Route::prefix('admin')->name('admin.')->group(function () {
+
+    Route::get('/', function () {
+        if (!auth()->check()) {
+            return redirect()->route('admin.login');
+        }
+
+        if (!auth()->user()->hasRole('admin')) {
+            abort(403);
+        }
+
+        return redirect()->route('admin.dashboard');
+    })->name('home');
+
+    Route::middleware('guest')->group(function () {
+        Route::get('/login', [AdminAuthController::class, 'create'])
+            ->name('login');
+        Route::post('/login', [AdminAuthController::class, 'store'])
+            ->name('login.store');
+    });
+
+    Route::post('/logout', [AdminAuthController::class, 'destroy'])
+        ->middleware('auth')
+        ->name('logout');
+
+    Route::middleware(['auth', 'admin'])->group(function () {
+        Route::get('/dashboard', [AdminController::class, 'index'])
+            ->name('dashboard');
+        
+       Route::get('/users/create', [AdminController::class, 'create'])
+            ->name('users.create');
+
+        Route::post('/users', [AdminController::class, 'store'])
+            ->name('users.store');
+
+    });
+});
 
 Route::get('/', function () {
     $rooms = Room::with(['city', 'specialty', 'coverPicture'])
