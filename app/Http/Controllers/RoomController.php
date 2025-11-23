@@ -9,9 +9,66 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
+use Inertia\Response;
 
 class RoomController extends Controller
 {
+
+    public function index(Request $request): Response
+    {
+        $cityId      = $request->integer('city_id');
+        $specialtyId = $request->integer('specialty_id');
+        $checkIn     = $request->input('check_in'); 
+        $checkOut    = $request->input('check_out'); 
+
+        $query = Room::query()
+            ->with(['city', 'specialty', 'coverPicture']);
+
+        if ($cityId) {
+            $query->where('city_id', $cityId);
+        }
+
+        if ($specialtyId) {
+            $query->where('specialty_id', $specialtyId);
+        }
+
+        if ($checkIn && $checkOut) {
+            $query->whereDoesntHave('reservations', function ($q) use ($checkIn, $checkOut) {
+                $q->whereIn('status', ['pending', 'confirmed'])
+                    ->where(function ($q2) use ($checkIn, $checkOut) {
+                        $q2->where('check_in', '<', $checkOut)
+                           ->where('check_out', '>', $checkIn);
+                    });
+            });
+        }
+
+        $rooms = $query
+            ->latest('id')
+            ->get()
+            ->map(fn ($r) => [
+                'id'             => $r->id,
+                'title'          => $r->title,
+                'city_name'      => $r->city?->name . ' - ' . $r->city?->state,
+                'specialty_name' => $r->specialty?->name,
+                'price'          => $r->price,
+                'rating_avg'     => $r->rating_avg,
+                'cover_url'      => optional($r->coverPicture)->url,
+            ])
+            ->values();
+
+        return Inertia::render('Welcome', [
+            'rooms'       => $rooms,
+            'cities'      => City::orderBy('name')->get(['id', 'name', 'state']),
+            'specialties' => Specialty::orderBy('name')->get(['id', 'name']),
+            'filters'     => [
+                'city_id'      => $cityId,
+                'specialty_id' => $specialtyId,
+                'check_in'     => $checkIn,
+                'check_out'    => $checkOut,
+            ],
+        ]);
+    }
+
     public function create()
     {
         return Inertia::render('Rooms/Create', [
