@@ -14,6 +14,47 @@ use Illuminate\Http\RedirectResponse;
 
 class ReservationController extends Controller
 {
+
+    public function index(Request $request): Response
+    {
+        $user = $request->user();
+
+        $reservations = Reservation::with(['room.city', 'room.specialty', 'room.coverPicture'])
+            ->where('user_id', $user->id)
+            ->latest('id')
+            ->get()
+            ->map(function (Reservation $reservation) {
+                $room      = $reservation->room;
+                $city      = $room?->city;
+                $specialty = $room?->specialty;
+
+                return [
+                    'id'             => $reservation->id,
+                    'status'         => $reservation->status,
+                    'payment_method' => $reservation->payment_method,
+                    'check_in'       => $reservation->check_in?->toDateString(),
+                    'check_out'      => $reservation->check_out?->toDateString(),
+                    'created_at'     => $reservation->created_at?->toDateString(),
+                    'room'           => $room ? [
+                        'id'          => $room->id,
+                        'title'       => $room->title,
+                        'city'        => $city ? [
+                            'name'  => $city->name,
+                            'state' => $city->state,
+                        ] : null,
+                        'specialty'   => $specialty ? [
+                            'name' => $specialty->name,
+                        ] : null,
+                        'cover_url'   => $room->coverPicture?->url,
+                    ] : null,
+                ];
+            });
+
+        return Inertia::render('Reservations/List', [
+            'reservations' => $reservations,
+        ]);
+    }
+
     /**
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Room  $room

@@ -83,14 +83,6 @@ function formatPayment(method) {
             Aqui você acompanha, confirma ou cancela as reservas dos seus anúncios.
           </p>
         </div>
-
-        <div
-          v-if="authUser"
-          class="rounded-full bg-zinc-100 px-4 py-1.5 text-xs text-zinc-700 dark:bg-zinc-900 dark:text-zinc-300"
-        >
-          Logado como:
-          <span class="font-medium">{{ authUser.name }}</span>
-        </div>
       </header>
 
       <!-- Lista de reservas -->

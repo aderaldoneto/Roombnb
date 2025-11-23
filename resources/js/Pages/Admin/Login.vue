@@ -13,6 +13,7 @@ function submit() {
 </script>
 
 <template>
+  
   <div class="min-h-screen flex items-center justify-center bg-zinc-100 dark:bg-zinc-950">
     <Head title="Admin Login" />
 

@@ -57,9 +57,6 @@ function submit() {
           ← Voltar para o anúncio
         </Link>
 
-        <span v-if="authUser" class="text-xs text-zinc-500 dark:text-zinc-400">
-          Logado como: <strong>{{ authUser.name }}</strong>
-        </span>
       </div>
 
       <!-- Card do quarto -->

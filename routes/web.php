@@ -107,16 +107,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('reservations.create');
     Route::post('/rooms/{room}/reservations', [ReservationController::class, 'store'])
         ->name('reservations.store');
+
     Route::get('/rooms/list', [RoomController::class, 'list'])
         ->name('rooms.list');
 
+    Route::get('/reservations', [ReservationController::class, 'index'])
+        ->name('reservations.index');
+
     Route::get('/tenant/dashboard', [TenantDashboardController::class, 'index'])
         ->name('tenant.dashboard');
-    Route::get('/reservations', [TenantReservationController::class, 'index'])
-    ->name('tenant.index');
 
-    // Route::put('/reservations/{reservation}', [TenantReservationController::class, 'update'])
-    //     ->name('reservations.update');
+    Route::get('/tenant/reservations', [TenantReservationController::class, 'index'])
+        ->name('tenant.reservations.index');
 
     Route::get('/profile', [ProfileController::class, 'edit'])
         ->name('profile.edit');
@@ -125,6 +127,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])
         ->name('profile.destroy');
 });
+
 
 
 require __DIR__ . '/auth.php';

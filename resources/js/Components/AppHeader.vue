@@ -96,7 +96,7 @@ onBeforeUnmount(() => {
                     </Link>
                     <Link
                         v-if="isTenant"
-                        :href="route('tenant.index')" 
+                        :href="route('tenant.reservations.index')" 
                         class="block px-4 py-2 text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800"
                         >
                         Minhas reservas
@@ -108,17 +108,12 @@ onBeforeUnmount(() => {
                         >
                         Minhas salas
                     </Link>
-                    <!-- Dashboard só se tiver ao menos 1 room para ver o desempenho -->
-                    <!-- <Link :href="route('dashboard')"
-                            v-if="$page.props.flags?.hasRooms"
-                            class="block px-4 py-2 text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800">
-                        Dashboard
-                    </Link> -->
-                    <!-- <Link :href="route('admin.home')"
-                            v-if="$page.props.flags?.isSuper"
-                            class="block px-4 py-2 text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800">
-                        Admin
-                    </Link> -->
+                    <Link 
+                        v-if="isHost"
+                        :href="route('reservations.index')"
+                        class="block px-4 py-2 text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800">
+                        Histórico
+                    </Link>
                     <!-- Histórico -->
                     <div class="border-t border-zinc-200 dark:border-zinc-700 my-1"></div>
                     <Link :href="route('logout')" method="post" as="button"
