@@ -9,10 +9,74 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
+use OpenApi\Annotations as OA;
+
 
 class ReservationController extends Controller
 {
 
+    /**
+     * @OA\Get(
+     *     path="/api/v1/reservations",
+     *     tags={"Reservations"},
+     *     summary="Lista reservas de um usuário",
+     *     description="Retorna todas as reservas associadas ao user_id informado.",
+     *
+     *     @OA\Parameter(
+     *         name="user_id",
+     *         in="query",
+     *         required=true,
+     *         description="ID do usuário (tenant) dono das reservas",
+     *         @OA\Schema(type="integer", example=4)
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=200,
+     *         description="Lista de reservas do usuário",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="data", type="array",
+     *                 @OA\Items(
+     *                     @OA\Property(property="id", type="integer", example=15),
+     *                     @OA\Property(property="status", type="string", example="pending"),
+     *                     @OA\Property(property="payment_method", type="string", nullable=true, example="pix"),
+     *                     @OA\Property(property="check_in", type="string", format="date", example="2025-02-11"),
+     *                     @OA\Property(property="check_out", type="string", format="date", example="2025-02-12"),
+     *                     @OA\Property(property="created_at", type="string", format="date-time", example="2025-01-10T12:34:56"),
+     *
+     *                     @OA\Property(
+     *                         property="room",
+     *                         type="object",
+     *                         nullable=true,
+     *                         @OA\Property(property="id", type="integer", example=7),
+     *                         @OA\Property(property="title", type="string", example="Consultório no Centro"),
+     *                         @OA\Property(
+     *                             property="city",
+     *                             type="object",
+     *                             nullable=true,
+     *                             @OA\Property(property="name", type="string", example="Salvador"),
+     *                             @OA\Property(property="state", type="string", example="BA")
+     *                         ),
+     *                         @OA\Property(
+     *                             property="specialty",
+     *                             type="object",
+     *                             nullable=true,
+     *                             @OA\Property(property="name", type="string", example="Psicologia")
+     *                         )
+     *                     )
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=422,
+     *         description="Parâmetro user_id ausente ou inválido",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="user_id is required")
+     *         )
+     *     )
+     * )
+     */
     public function index(Request $request)
     {
         $userId = $request->integer('user_id');
@@ -55,6 +119,51 @@ class ReservationController extends Controller
         ]);
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/v1/rooms/{room}/reservations",
+     *     tags={"Reservations"},
+     *     summary="Cria uma nova reserva para um room",
+     *     @OA\Parameter(
+     *         name="room",
+     *         in="path",
+     *         required=true,
+     *         description="ID do room",
+     *         @OA\Schema(type="integer", example=7)
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"user_id","check_in","check_out"},
+     *             @OA\Property(property="user_id", type="integer", example=4),
+     *             @OA\Property(property="check_in", type="string", format="date", example="2025-02-11"),
+     *             @OA\Property(property="check_out", type="string", format="date", example="2025-02-12"),
+     *             @OA\Property(property="payment_method", type="string", enum={"credit_card","cash","pix"}, example="pix")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Reserva criada com sucesso",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="id", type="integer", example=10),
+     *                 @OA\Property(property="status", type="string", example="pending"),
+     *                 @OA\Property(property="payment_method", type="string", example="pix"),
+     *                 @OA\Property(property="check_in", type="string", format="date", example="2025-02-11"),
+     *                 @OA\Property(property="check_out", type="string", format="date", example="2025-02-12")
+     *             ),
+     *             @OA\Property(property="message", type="string", example="Reserva criada com sucesso.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Erro de validação ou conflito de datas",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Os dados enviados são inválidos.")
+     *         )
+     *     )
+     * )
+     */
     public function store(Request $request, Room $room)
     {
         $validator = Validator::make($request->all(), [

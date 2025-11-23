@@ -19,15 +19,37 @@ Familiaridade
 User, City, Specialty, Room, Reservation 
 
 
+## Rodar o projeto 
+git clone https://github.com/aderaldoneto/Roombnb  
+cd Roombnb  
+cp .env.example .env  
 
+# Com Sail (eu costumo usar o Sail)
+(PS: eu uso apenas `sail` porque criei um alias para não precisar digita `./vendor/bin/sail`)  
+composer install  
+npm install  
+npm run build  
+php artisan sail:install  
+sail up -d  
+sail artisan migrate  
+sail artisan db:seed  
+sail npm run dev -- --host  
 php artisan storage:link  
+
+## Acessar o projeto
+Web: http://localhost  
+API: http://localhost/api/v1  
+
+## Seeders 
 sail php artisan db:seed SpecialtySeeder  
-RoleSeeder  
-AdminUserSeeder   
-ClientUserSeeder  
+sail php artisan db:seed RoleSeeder  
+sail php artisan db:seed AdminUserSeeder   
+sail php artisan db:seed CitySeeder  
+sail php artisan db:seed ClientUserSeeder  
+sail php artisan db:seed DatabaseSeeder  
 
 
-API:  
+## API:  
 GET  
 localhost/api/v1/rooms  
 
@@ -40,11 +62,16 @@ localhost/api/v1/reservations?user_id={id}
 
 POST  
 localhost/api/v1/rooms/{room_id}/reservations  
-{
-  "user_id": 4,
-  "check_in": "2025-02-11",
-  "check_out": "2025-02-12",
-  "payment_method": "pix"
-}
+{  
+  "user_id": 4,  
+  "check_in": "2025-02-11",  
+  "check_out": "2025-02-12",  
+  "payment_method": "pix"  
+}  
 
 
+## Documentação (Swagger)  
+php artisan l5-swagger:generate (Sail)  
+
+# ULR  
+http://localhost/api/documentation  
