@@ -25,3 +25,26 @@ sail php artisan db:seed SpecialtySeeder
 RoleSeeder  
 AdminUserSeeder   
 ClientUserSeeder  
+
+
+API:  
+GET  
+localhost/api/v1/rooms  
+
+GET  
+localhost/api/v1/rooms/{room_id}  
+
+GET  
+localhost/api/v1/reservations?user_id={id}  
+
+
+POST  
+localhost/api/v1/rooms/{room_id}/reservations  
+{
+  "user_id": 4,
+  "check_in": "2025-02-11",
+  "check_out": "2025-02-12",
+  "payment_method": "pix"
+}
+
+
