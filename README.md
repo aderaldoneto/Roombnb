@@ -7,17 +7,13 @@ O sistema gerencia disponibilidade, reservas, aprovação pelo dono da sala e hi
 
 ## Stack 
 # Backend 
-Laravel 
+Laravel  
 # Frontend 
-Vue.js 
+Vue.js  
 # Banco de Dados 
-PostgreSQL 
-# Motivo 
-Familiaridade 
-
+PostgreSQL  
 ## Models 
-User, City, Specialty, Room, Reservation 
-
+User, City, Specialty, Room, Reservation  
 
 ## Rodar o projeto 
 git clone https://github.com/aderaldoneto/Roombnb  
@@ -71,7 +67,7 @@ localhost/api/v1/rooms/{room_id}/reservations
 
 
 ## Documentação (Swagger)  
-php artisan l5-swagger:generate (Sail)  
+sail php artisan l5-swagger:generate    
 
 # ULR  
 http://localhost/api/documentation  
